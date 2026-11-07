@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Find workshops, live music, talks, and meetups in Hyderabad.">
+  <meta name="theme-color" content="#151517">
+  <title>FestPeak — Local Events, Workshops & Meetups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Continuous Ambient Background (Fixed throughout entire scroll) -->
+  <div class="site-ambient-bg" aria-hidden="true"></div>
+
+  <!-- Top Announcement Banner -->
+  <div class="announcement">
+    <div class="announcement-content">
+      <span class="pulse-wrapper"><span class="pulse"></span></span>
+      <span class="announcement-text">New events added every week</span>
+      <a href="#events" class="announcement-right">See what's coming up <span class="announcement-arrow" aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <a class="brand" href="#" aria-label="FestPeak home">
+          <svg class="brand-prism-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+            <path d="M12 3 22 20H2z"/>
+          </svg>
+          <span class="brand-slash">/</span>
+          <span class="brand-name">FestPeak</span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a class="active" href="#events">Browse events</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#newsletter">Newsletter</a>
+          <a href="#my-registrations" id="myRegistrationsNav">My registrations <span class="nav-badge" id="regCountBadge" style="display:none">0</span></a>
+        </nav>
+      </div>
+
+      <div class="header-actions">
+        <button class="theme-toggle icon-btn" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">☾</button>
+        <button class="menu-toggle icon-btn" id="menuToggle" aria-label="Open menu" title="Open navigation">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <path d="M4 8h16M4 16h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section with Interactive Prismatic Light Stage -->
+    <section class="hero" id="about" aria-label="FestPeak Experiences">
+      <div class="stage" aria-hidden="true">
+        <canvas id="gl"></canvas>
+        <canvas id="fx"></canvas>
+      </div>
+
+      <div class="hero-container">
+        <div class="hero-copy rise">
+          <div class="eyebrow">
+            <span class="eyebrow-line"></span>
+            <span>HYDERABAD EVENTS</span>
+          </div>
+          <h1 class="wordmark">Find something <em>happening</em> near <span>you.</span></h1>
+          <p class="hero-description lede">Workshops, live music, talks, and meetups. Find events worth stepping out for.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#events">Browse events <span class="btn-arrow">↗</span></a>
+            <a class="text-link" href="#how-it-works">How it works <span class="link-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Events Discovery Section -->
+    <section class="events-section section-pad" id="events">
+      <div class="section-container">
+        <div class="section-heading">
+          <div class="heading-copy">
+            <div class="eyebrow"><span class="eyebrow-line"></span> THIS MONTH</div>
+            <h2>Upcoming <em>events</em></h2>
+            <p class="section-subtitle">Filter by category or search by title, venue, and topic.</p>
+          </div>
+          <a href="#eventGrid" class="text-link desktop-link">See all events <span>→</span></a>
+        </div>
+
+        <div class="discover-tools">
+          <label class="search-box">
+            <span class="search-icon">⌕</span>
+            <input id="searchInput" type="search" placeholder="Search by event title, venue, or keyword..." aria-label="Search events">
+            <kbd>⌘ K</kbd>
+          </label>
+          <div class="filters-scroll-wrap">
+            <div class="filters" id="categoryFilters" aria-label="Filter by category" role="tablist">
+              <button class="filter-chip selected" data-category="All" role="tab" aria-selected="true">All events</button>
+              <button class="filter-chip" data-category="Technology" role="tab" aria-selected="false">Technology</button>
+              <button class="filter-chip" data-category="Music" role="tab" aria-selected="false">Music</button>
+              <button class="filter-chip" data-category="Business" role="tab" aria-selected="false">Business</button>
+              <button class="filter-chip" data-category="Lifestyle" role="tab" aria-selected="false">Lifestyle</button>
+              <button class="filter-chip" data-category="Arts" role="tab" aria-selected="false">Arts</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-row">
+          <span id="resultsCount">Showing 6 events</span>
+          <span class="curated-badge">Updated weekly</span>
+        </div>
+
+        <div class="event-grid" id="eventGrid"></div>
+
+        <div class="empty-state hidden" id="emptyState">
+          <div class="empty-icon-wrap"><span>⌕</span></div>
+          <h3>No events found</h3>
+          <p>Try a different search term or clear your filters.</p>
+          <button class="button button-outline" id="resetFilters">Clear filters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Band ("About FestPeak") -->
+    <section class="feature-band" id="how-it-works">
+      <div class="feature-image">
+        <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1100&q=85" alt="People sharing a meal and conversation">
+        <span class="feature-image-label">OFFLINE GATHERINGS</span>
+      </div>
+      <div class="feature-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> ABOUT FESTPEAK</div>
+        <h2>Events worth <em>leaving</em> the house for.</h2>
+        <p>Too many weekends slip by doing nothing. FestPeak brings together local gigs, practical workshops, and small meetups across Hyderabad so you can always find something real to do.</p>
+        <div class="feature-points">
+          <div class="feature-point-item">
+            <span class="point-num">01</span>
+            <strong>Handpicked events with clear schedules and details</strong>
+          </div>
+          <div class="feature-point-item">
+            <span class="point-num">02</span>
+            <strong>Free to browse and sign up with no extra fees</strong>
+          </div>
+          <div class="feature-point-item">
+            <span class="point-num">03</span>
+            <strong>Meet hosts, artists, and people in your neighborhood</strong>
+          </div>
+        </div>
+        <a class="button button-light" href="#events">Find an event <span>↗</span></a>
+      </div>
+    </section>
+
+    <!-- Steps Section ("How It Works") -->
+    <section class="steps-section section-pad">
+      <div class="section-container steps-wrapper">
+        <div class="steps-intro">
+          <div class="eyebrow"><span class="eyebrow-line"></span> HOW IT WORKS</div>
+          <h2>How it <em>works.</em></h2>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card">
+            <div class="step-header">
+              <span class="step-number">01</span>
+              <div class="step-icon">⌕</div>
+            </div>
+            <h3>Find an event</h3>
+            <p>Filter by category, search by venue, or see what is happening this weekend.</p>
+          </article>
+          <article class="step-card">
+            <div class="step-header">
+              <span class="step-number">02</span>
+              <div class="step-icon">↗</div>
+            </div>
+            <h3>Save your spot</h3>
+            <p>Fill in your name and email to register. You will get immediate confirmation.</p>
+          </article>
+          <article class="step-card">
+            <div class="step-header">
+              <span class="step-number">03</span>
+              <div class="step-icon">✦</div>
+            </div>
+            <h3>Show up</h3>
+            <p>Head to the venue at the scheduled time, check in, and enjoy the session.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section" id="newsletter">
+      <div class="newsletter-card">
+        <div class="newsletter-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> WEEKLY PICKS</div>
+          <h2>Never miss a good <em>event.</em></h2>
+          <p>Every Thursday morning, we send a short list of 3 to 5 weekend events worth checking out in Hyderabad.</p>
+        </div>
+        <form id="newsletterForm" class="newsletter-form">
+          <div class="input-action-group">
+            <label class="sr-only" for="newsletterEmail">Email address</label>
+            <input id="newsletterEmail" type="email" placeholder="Enter your email address" required autocomplete="email">
+            <button type="submit">Subscribe <span>↗</span></button>
+          </div>
+          <small id="newsletterMessage">One email a week. No spam, ever.</small>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Minimalist Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <a class="brand footer-brand" href="#" aria-label="FestPeak home">
+          <svg class="brand-prism-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+            <path d="M12 3 22 20H2z"/>
+          </svg>
+          <span class="brand-slash">/</span>
+          <span class="brand-name">FestPeak</span>
+        </a>
+        <p class="footer-tagline">Local events, independent gigs, and workshops across Hyderabad.</p>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 FestPeak. All rights reserved.</span>
+        <div class="footer-links">
+          <a href="#events">Events</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="mailto:hello@festpeak.example">Contact</a>
+        </div>
+        <span class="footer-badge">HYDERABAD, INDIA</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Event Detail & Registration Modal -->
+  <div class="modal-backdrop hidden" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="event-modal">
+      <button class="modal-close icon-btn" id="closeModal" aria-label="Close dialog" title="Close">×</button>
+      <div class="modal-image">
+        <img id="modalImage" src="" alt="">
+        <span id="modalCategory" class="category-label"></span>
+      </div>
+      <div class="modal-content">
+        <div class="modal-kicker">EVENT DETAILS</div>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <div class="modal-meta">
+          <span id="modalDate" class="meta-item date-item"></span>
+          <span id="modalVenue" class="meta-item venue-item"></span>
+          <span id="modalPrice" class="meta-item price-item"></span>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="registration-section">
+          <h3 id="formIntroHeading">Save your spot</h3>
+          <p class="form-intro" id="formIntroDesc">Drop in your details below to register for this event.</p>
+          <form id="registrationForm" novalidate>
+            <input type="hidden" id="selectedEvent">
+            <div class="form-row">
+              <label for="fullName">
+                <span>Full name</span>
+                <input id="fullName" name="name" type="text" placeholder="e.g. Alex Morgan" autocomplete="name" required>
+              </label>
+              <label for="email">
+                <span>Email address</span>
+                <input id="email" name="email" type="email" placeholder="alex@example.com" autocomplete="email" required>
+              </label>
+            </div>
+            <div class="form-row">
+              <label for="phone">
+                <span>Phone number</span>
+                <input id="phone" name="phone" type="tel" placeholder="10-digit mobile number" autocomplete="tel" required>
+              </label>
+              <label for="eventSelect">
+                <span>Selected event</span>
+                <select id="eventSelect" name="event" required></select>
+              </label>
+            </div>
+            <div class="form-error" id="formError" role="alert"></div>
+            <button class="button button-primary submit-button" type="submit">
+              <span>Register now</span>
+              <span class="btn-arrow">↗</span>
+            </button>
+            <small class="privacy-note">We only use your contact details to send event updates and venue directions.</small>
+          </form>
+
+          <!-- Already Registered View inside Event Modal -->
+          <div class="registered-panel hidden" id="registeredPanel">
+            <div class="registered-status-badge">
+              <span class="status-dot"></span>
+              <span>Confirmed Registration</span>
+            </div>
+            <h4 class="registered-title">You are registered for this event</h4>
+            <p class="registered-details">Spot reserved for <strong id="registeredName"></strong> (<span id="registeredEmail"></span>).</p>
+            <div class="registered-meta-tags">
+              <span class="registered-chip">✓ 1 Spot Reserved</span>
+              <span class="registered-chip" id="registeredDate">Registered</span>
+            </div>
+            <div class="registered-actions">
+              <button type="button" class="button button-outline button-sm" id="cancelRegBtn">Cancel registration</button>
+            </div>
+          </div>
+
+          <div class="success-panel hidden" id="successPanel">
+            <div class="success-badge"><span>✓</span></div>
+            <h3>You're on the list</h3>
+            <p id="successMessage">Your registration has been saved. We'll see you there.</p>
+            <button class="button button-outline" id="doneButton">Browse more events</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Registrations List Modal -->
+  <div class="modal-backdrop hidden" id="registrationsModal" role="dialog" aria-modal="true" aria-labelledby="regModalTitle">
+    <div class="registrations-modal-dialog">
+      <div class="reg-modal-header">
+        <div>
+          <div class="modal-kicker">YOUR SCHEDULE</div>
+          <h2 id="regModalTitle" class="reg-modal-title">My <em>registrations</em></h2>
+        </div>
+        <button class="modal-close icon-btn" id="closeRegModal" aria-label="Close dialog" title="Close">×</button>
+      </div>
+      <div class="reg-modal-body" id="regModalBody">
+        <!-- Rendered dynamically via script.js -->
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
